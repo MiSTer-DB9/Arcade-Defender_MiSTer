@@ -82,6 +82,7 @@ module emu
 	// 1 - D-/TX
 	// 2..6 - USR2..USR6
 	// Set USER_OUT to 1 to read from USER_IN.
+	output	USER_OSD,
 	output	USER_MODE,
 input	[7:0] USER_IN,
 output	[7:0] USER_OUT
@@ -94,6 +95,7 @@ wire   joy_split, joy_mdsel;
 wire   [5:0] joy_in = {USER_IN[6],USER_IN[3],USER_IN[5],USER_IN[7],USER_IN[1],USER_IN[2]};
 assign USER_OUT  = |status[31:30] ? {3'b111,joy_split,3'b111,joy_mdsel} : '1;
 assign USER_MODE = |status[31:30] ;
+assign USER_OSD  = joydb9md_1[7] & joydb9md_1[5];
 
 
 assign LED_USER  = ioctl_download;
@@ -161,10 +163,10 @@ wire [15:0] joy1 = |status[31:30] ? {
 	joydb9md_1[8] | (joydb9md_1[7] & joydb9md_1[4]),// Mode|  Start + B-> 10 * Coin
 	joydb9md_1[11],// _start_2	-> 9 * Z (dummy)
 	joydb9md_1[7], // _start_1	-> 8 * Start
-	joydb9md_1[10],// btn_fireD	-> 7 * Y
-	joydb9md_1[9], // btn_fireC	-> 6 * X
-	joydb9md_1[5], // btn_fireB	-> 5 * C
-	joydb9md_1[4], // btn_fireA	-> 4 * B
+	joydb9md_1[9],// btn_fireD	-> 7 * X
+	joydb9md_1[5], // btn_fireC	-> 6 * C
+	joydb9md_1[4], // btn_fireB	-> 5 * B
+	joydb9md_1[6], // btn_fireA	-> 4 * A
 	joydb9md_1[3], // btn_up	-> 3 * U
 	joydb9md_1[2], // btn_down	-> 2 * D
 	joydb9md_1[1], // btn_left	-> 1 * L
@@ -176,10 +178,10 @@ wire [15:0] joy2 =  status[31]    ? {
 	joydb9md_2[8] | (joydb9md_2[7] & joydb9md_2[4]),// Mode |Start + B-> 10 * Coin
 	joydb9md_2[7], // _start_2	-> 9 * Start
 	joydb9md_2[11],// _start_1	-> 8 (dummy)
-	joydb9md_2[10],// btn_fireD	-> 7 * Y
-	joydb9md_2[9], // btn_fireC	-> 6 * X
-	joydb9md_2[5], // btn_fireB -> 5 * C
-	joydb9md_2[4], // btn_fireA -> 4 * B
+	joydb9md_2[9], // btn_fireD	-> 7 * X
+	joydb9md_2[5], // btn_fireC	-> 6 * C
+	joydb9md_2[4], // btn_fireB -> 5 * B
+	joydb9md_2[6], // btn_fireA -> 4 * A
 	joydb9md_2[3], // btn_up    -> 3 * U
 	joydb9md_2[2], // btn_down  -> 2 * D
 	joydb9md_2[1], // btn_left  -> 1 * L
@@ -225,7 +227,7 @@ hps_io #(.STRLEN($size(CONF_STR)>>3)) hps_io
 
 	.joystick_0(joy1_USB),
 	.joystick_1(joy2_USB),
-	.joy_raw({(joydb9md_1[8]&joydb9md_1[6]),joydb9md_1[4:0]}),	
+	.joy_raw(joydb9md_1[5:0]), //Menu Dirs, A:Action B:Back
 
 	.ps2_key(ps2_key)
 );
