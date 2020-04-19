@@ -8,3 +8,4 @@ set_global_assignment -name VHDL_FILE rtl/williams_sound_board.vhd
 set_global_assignment -name VHDL_FILE rtl/defender.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE "Arcade-Defender.sv"
 set_global_assignment -name VERILOG_FILE rtl/joydb9md.v
+set_global_assignment -name VERILOG_FILE rtl/joydb15.v
